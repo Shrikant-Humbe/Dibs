@@ -1,5 +1,6 @@
 package org.me.dibs.config;
 
+import org.me.dibs.constants.SecurityConfigConstant;
 import org.me.dibs.service.OidcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,14 +37,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authprovider = new DaoAuthenticationProvider(userDetailsService);
-        authprovider.setPasswordEncoder(new BCryptPasswordEncoder(10));
+        authprovider.setPasswordEncoder(new BCryptPasswordEncoder(SecurityConfigConstant.BCRYPT_STRENGTH.getIntValue()));
         return  authprovider;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         String frontendUrl = System.getenv("FRONTEND_URL");
-        String successRedirectUrl = (frontendUrl != null) ? frontendUrl : "http://localhost:5173/";
+        String successRedirectUrl = (frontendUrl != null) ? frontendUrl : SecurityConfigConstant.DEFAULT_FRONTEND_URL.getValue();
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -58,6 +59,8 @@ public class SecurityConfig {
                 .sessionManagement(session->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/oauth2/authorization/google")))
                 .cors(Customizer.withDefaults())
 
         ;
@@ -71,7 +74,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         String frontendUrl = System.getenv("FRONTEND_URL");
-        List<String> allowedOrigins = frontendUrl != null ? List.of(frontendUrl, "http://localhost:5173") : List.of("http://localhost:5173");
+        List<String> allowedOrigins = frontendUrl != null ? List.of(frontendUrl, SecurityConfigConstant.DEFAULT_FRONTEND_ORIGIN.getValue()) : List.of(SecurityConfigConstant.DEFAULT_FRONTEND_ORIGIN.getValue());
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

@@ -21,7 +21,7 @@ public class ItemController {
         return  new ResponseEntity<>("hi",HttpStatus.OK);
     }
     @PostMapping("/item")
-    ResponseEntity<String> addItem(@RequestPart Item item, @RequestPart MultipartFile image, Principal principal) throws IOException {
+    ResponseEntity<String> addItem(@RequestPart Item item, @RequestPart(required = false) MultipartFile image, Principal principal) throws IOException {
         itemService.addItem(item,image,principal);
         return new ResponseEntity<>(principal.getName(),HttpStatus.ACCEPTED);
     }

@@ -31,7 +31,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void addItem(Item item, MultipartFile image, Principal principal) throws IOException {
-        item.setImage(imageService.extractBytes(image));
+        if (image != null && !image.isEmpty()) {
+            item.setImage(imageService.extractBytes(image));
+        }
         item.setUser(userService.getUser(principal.getName()));
         itemRepository.save(item);
     }

@@ -21,7 +21,9 @@ public class ItemController {
         return  new ResponseEntity<>("hi",HttpStatus.OK);
     }
     @PostMapping("/item")
-    ResponseEntity<String> addItem(@RequestPart Item item, @RequestPart(required = false) MultipartFile image, Principal principal) throws IOException {
+    ResponseEntity<String> addItem(@RequestParam("item") String itemJson, @RequestPart(required = false) MultipartFile image, Principal principal) throws IOException {
+        com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        Item item = objectMapper.readValue(itemJson, Item.class);
         itemService.addItem(item,image,principal);
         return new ResponseEntity<>(principal.getName(),HttpStatus.ACCEPTED);
     }

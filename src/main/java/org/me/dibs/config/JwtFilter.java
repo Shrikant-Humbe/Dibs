@@ -30,13 +30,21 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader=request.getHeader(JwtConstant.HEADER_NAME.getValue());
         String token=null;
         String username=null;
-        Cookie[] cookies=request.getCookies();
-        if (cookies != null) {
-            for(Cookie cookie:cookies){
-               // System.out.println(cookie.getValue());
-                if(cookie.getName().equals(CookieConstant.COOKIE_NAME.getValue())){
-                    token=cookie.getValue();
-                    break;
+        
+        // Check Authorization header first
+        if (authHeader != null && authHeader.startsWith(JwtConstant.TOKEN_PREFIX.getValue())) {
+            token = authHeader.substring(7);
+        }
+
+        // Fallback to cookies if not found in header
+        if (token == null) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for(Cookie cookie:cookies){
+                    if(cookie.getName().equals(CookieConstant.COOKIE_NAME.getValue())){
+                        token=cookie.getValue();
+                        break;
+                    }
                 }
             }
         }

@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -47,19 +48,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody User user, HttpServletResponse response) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
         } catch (AuthenticationException e) {
-            System.out.println(e);
+            return new ResponseEntity<>(Map.of("error", "Invalid credentials"), HttpStatus.UNAUTHORIZED);
         }
 
         String token = jwtService.generateToken(user.getUsername());
         ResponseCookie cookie = cookieUtil.createJwtCookie(token);
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        return "login successfull";
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
     @GetMapping("/user")

@@ -6,6 +6,8 @@ import org.me.dibs.Repository.UserRepository;
 import org.me.dibs.model.User;
 import org.me.dibs.model.UserDetail;
 import org.me.dibs.service.UserService;
+import org.me.dibs.controller.UserPrincipal;
+import org.me.dibs.constants.UserRoleConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -63,5 +65,18 @@ public class UserIntegrationTests {
         assertNotNull(persistedDetail);
         assertEquals("John", persistedDetail.getFirstName());
         assertEquals("Doe", persistedDetail.getLastName());
+    }
+
+    @Test
+    public void testUserPrincipalWithNullRole() {
+        User user = new User();
+        user.setUsername("test_user");
+        user.setRole(null);
+        
+        UserPrincipal principal = new UserPrincipal(user);
+        assertNotNull(principal.getAuthorities());
+        assertFalse(principal.getAuthorities().isEmpty());
+        assertEquals(UserRoleConstant.ROLE_USER.getValue(), 
+            principal.getAuthorities().iterator().next().getAuthority());
     }
 }

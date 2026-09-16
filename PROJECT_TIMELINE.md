@@ -24,6 +24,7 @@ gantt
     section Deployment & Fixes
     Dockerization & Env Setup : 2026-07-09, 2026-07-10
     Prod Readiness & Clean CORS : 2026-07-10, 2026-07-11
+    Secrets & Constants Enum Refactoring : 2026-07-20, 2026-07-20
 ```
 
 ---
@@ -80,6 +81,15 @@ The final series of commits prepared the application for public cloud deployment
 
 ---
 
+### Phase 6: Constants & Secrets Enum Refactoring (July 20, 2026)
+
+Refactored the application to eliminate hardcoded secrets, configuration strings, and magic numbers by centralizing them into dedicated Enums in `org.me.dibs.constants`.
+
+*   **Constants Package Creation**: Added `SecuritySecret`, `JwtConstant`, `CookieConstant`, `UserRoleConstant`, and `SecurityConfigConstant` Enums.
+*   **Service & Security Integration**: Replaced string literals in [JwtServiceImpl.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/service/JwtServiceImpl.java), [CookieUtil.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/CookieUtil.java), [JwtFilter.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/JwtFilter.java), [SecurityConfig.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/SecurityConfig.java), [UserServiceImpl.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/service/UserServiceImpl.java), and [User.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/model/User.java) with Enum constants.
+
+---
+
 ## Detailed Commit Log
 
 The following table documents all commits in chronological order (oldest to newest):
@@ -123,3 +133,4 @@ The following table documents all commits in chronological order (oldest to newe
 | 2026-07-10 | `2858710` | LUCARIO-7 | Added explicit PostgreSQL dialect to prevent detection failure | [application.properties](file:///c:/Projects/spring/Dibs/src/main/resources/application.properties) |
 | 2026-07-10 | `8fcbf0e` | LUCARIO-7 | Centered CORS configurations in SecurityConfig (removed inline) | [ItemController.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/controller/ItemController.java), [userController.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/controller/userController.java) |
 | 2026-07-11 | `2c1d097` | LUCARIO-7 | Implemented work-in-progress filtering logic | [ItemRepository.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/Repository/ItemRepository.java), [ItemService.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/service/ItemService.java), [application.properties](file:///c:/Projects/spring/Dibs/src/main/resources/application.properties) |
+| 2026-07-20 | `pending` | LUCARIO-7 | Refactored hardcoded secrets and constants using Enums | [SecuritySecret.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/constants/SecuritySecret.java), [JwtConstant.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/constants/JwtConstant.java), [CookieConstant.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/constants/CookieConstant.java), [UserRoleConstant.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/constants/UserRoleConstant.java), [SecurityConfigConstant.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/constants/SecurityConfigConstant.java), [JwtServiceImpl.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/service/JwtServiceImpl.java), [CookieUtil.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/CookieUtil.java), [JwtFilter.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/JwtFilter.java), [SecurityConfig.java](file:///c:/Projects/spring/Dibs/src/main/java/org/me/dibs/config/SecurityConfig.java) |

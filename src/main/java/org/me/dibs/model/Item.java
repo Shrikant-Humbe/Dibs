@@ -14,6 +14,8 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private double latitude;
+    private double longitude;
     private String name;
     private String description;
     @Lob

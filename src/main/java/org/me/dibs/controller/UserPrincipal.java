@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import org.me.dibs.constants.UserRoleConstant;
+
 import java.util.Collection;
 import java.util.Collections;
 
@@ -16,7 +18,11 @@ public class UserPrincipal implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
+        String role = user.getRole();
+        if (role == null || role.trim().isEmpty()) {
+            role = UserRoleConstant.ROLE_USER.getValue();
+        }
+        return Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
     @Override

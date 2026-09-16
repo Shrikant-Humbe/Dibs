@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.me.dibs.constants.UserRoleConstant;
 
 import java.util.List;
 
@@ -33,5 +34,9 @@ public class User {
     @JsonIgnore
     private UserDetail userDetail;
 
-    private String role = "ROLE_USER";
+    private String role = UserRoleConstant.ROLE_USER.getValue();
+
+    public String getRole() {
+        return (role != null && !role.trim().isEmpty()) ? role : UserRoleConstant.ROLE_USER.getValue();
+    }
 }

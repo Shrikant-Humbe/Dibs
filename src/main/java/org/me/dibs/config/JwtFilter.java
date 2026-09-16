@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.me.dibs.constants.CookieConstant;
+import org.me.dibs.constants.JwtConstant;
 import org.me.dibs.service.JwtService;
 import org.me.dibs.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,14 @@ public class JwtFilter extends OncePerRequestFilter {
     ApplicationContext context;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader=request.getHeader("Authorization");
+        String authHeader=request.getHeader(JwtConstant.HEADER_NAME.getValue());
         String token=null;
         String username=null;
         Cookie[] cookies=request.getCookies();
         if (cookies != null) {
             for(Cookie cookie:cookies){
                // System.out.println(cookie.getValue());
-                if(cookie.getName().equals("jwtoken")){
+                if(cookie.getName().equals(CookieConstant.COOKIE_NAME.getValue())){
                     token=cookie.getValue();
                     break;
                 }

@@ -1,6 +1,7 @@
 package org.me.dibs.service;
 
 import org.me.dibs.Repository.UserRepository;
+import org.me.dibs.constants.SecurityConfigConstant;
 import org.me.dibs.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageService imageService;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfigConstant.BCRYPT_STRENGTH.getIntValue());
 
     @Override
     public void addUser(User user, MultipartFile profilePicture) throws IOException {

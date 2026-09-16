@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.me.dibs.constants.JwtConstant;
+import org.me.dibs.constants.SecuritySecret;
 import org.me.dibs.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,14 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()*1000*60*50))
+                .setExpiration(new Date(System.currentTimeMillis() + JwtConstant.EXPIRATION_TIME.getLongValue()))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
 
     }
     @Override
     public Key getKey(){
-        byte[] bytes= Decoders.BASE64.decode("234324324234asdsadadwasdasdasdasdcasdawasdasdcweqdasdweawdsdadad");
+        byte[] bytes= Decoders.BASE64.decode(SecuritySecret.JWT_SECRET.getValue());
         return Keys.hmacShaKeyFor(bytes);
     }
 
